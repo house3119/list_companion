@@ -1,0 +1,24 @@
+{% extends "list_companion/login_template.html" %}
+
+{% load static %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <body>
+            <h2>Register</h2>
+            {% if message %}
+                <h2>{{ message }}</h2>
+            {% endif %}
+            <form action="{% url 'register' %}" method="post">
+                {% csrf_token %}
+                {{ register_form }}
+                <button type="submit" class="btn btn-primary">Register</button>
+            </form>
+            <a href="{% url 'login' %}">Already have an account? Log in here.</a>
+        </body>
+    </div>
+{% endblock %}

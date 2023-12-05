@@ -1,0 +1,87 @@
+{% extends "list_companion/main_template.html" %}
+
+{% load static %}
+
+{% block title %}
+    List Companion
+{% endblock %}
+
+{% block body %}
+
+    <body>
+        
+        <div class="container" style="display:none">
+            <a href="{% url 'logout' %}">Log out</a>
+        </div>
+
+        <div class="container text-center display-none" id="back-button-div">
+            <button class="btn btn-primary" id="back-button">Back</button>
+        </div>
+
+
+        <!-- Default view to show all own lists as cards -->
+        <div id="view-all-lists-div">
+            <div class="container" id="view-all-lists-container">
+        
+            </div>
+
+            <div class="container">
+                <button type="button" class="btn btn-primary" id="toggle-create-new-list-div-button">
+                    + New List
+                </button>
+            </div>
+
+            <div id="create-new-list-div" class="container" style="display:none">
+                <input id="new-list-name" type="text" placeholder="Name" name="new-list-name" class="form-control">
+                <input id="new-list-description" type="text" placeholder="Description" name="new-list-description" class="form-control">
+                <button id="create-new-list-button" type="button" class="btn btn-primary">Create</button>
+            </div>
+        </div>
+        <!---->
+
+        <!-- Single list view div -->
+        <div id="view-individual-list-div" class="display-none">
+            <div class="container">
+                <div class="btn-group" role="group" aria-label="Basic example">
+                    <button type="button" class="btn btn-primary" id="list-action-items">Items</button>
+                    <button type="button" class="btn btn-primary" id="list-action-users">Users</button>
+                    <button type="button" class="btn btn-primary" id="list-action-logs">Logs</button>
+                </div>
+            </div>
+            <div class="container" id="list-items-container">
+
+            </div>
+
+            <div class="container" id="toggle-add-new-item-container">
+
+            </div>
+
+            <div class="container display-none" id="add-new-item-container">
+
+            </div>
+
+            <div class="container" id="users-container">
+
+            </div>
+
+            <div class="container" id="toggle-add-user-container">
+
+            </div>
+
+            <div class="container display-none" id="add-user-container">
+
+            </div>
+
+            <div class="container text-center" id="add-user-message">
+
+            </div>
+        </div>
+        <!---->
+
+        <div id="current-list-id" class="container display-none">
+
+        </div>
+
+    </body>
+
+{% endblock %}
