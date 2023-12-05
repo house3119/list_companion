@@ -32,10 +32,10 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('toggle-create-new-list-div-button').addEventListener('click', () => {
         if (document.getElementById('create-new-list-div').style.display === 'none') {
             document.getElementById('create-new-list-div').style.display = 'block';
-            document.getElementById('toggle-create-new-list-div-button').innerHTML = '- New List'
+            document.getElementById('toggle-create-new-list-div-button').innerHTML = '- Create new list'
         } else {
             document.getElementById('create-new-list-div').style.display = 'none';
-            document.getElementById('toggle-create-new-list-div-button').innerHTML = '+ New List'
+            document.getElementById('toggle-create-new-list-div-button').innerHTML = '+ Create new list'
         }
     })
 
@@ -54,7 +54,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.getElementById('users-container').classList.add('display-none')
         document.getElementById('toggle-add-user-container').classList.add('display-none')
+        document.getElementById('add-user-container').classList.add('display-none')
         document.getElementById('add-user-message').innerHTML = '';
+        document.getElementById('list-action-logs').classList.remove('list-action-active');
         
     })
 
@@ -73,6 +75,8 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('users-container').classList.remove('display-none')
         document.getElementById('toggle-add-user-container').classList.remove('display-none')
         document.getElementById('add-user-container').classList.add('display-none')
+        document.getElementById('list-action-logs').classList.remove('list-action-active');
+        document.getElementById('log-container').classList.add('display-none');
 
         build_user_view()
     })
@@ -92,7 +96,31 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('toggle-add-user-container').classList.add('display-none')
         document.getElementById('add-user-container').classList.add('display-none')
         document.getElementById('add-user-message').innerHTML = '';
+        document.getElementById('list-action-logs').classList.remove('list-action-active');
+        document.getElementById('log-container').classList.add('display-none');
     })
+
+    document.getElementById('list-action-logs').addEventListener('click', () => {
+        if (document.getElementById('list-action-logs').classList.contains('list-action-active')) {
+            return
+        }
+
+        document.getElementById('list-items-container').classList.add('display-none');
+        document.getElementById('toggle-add-new-item-container').classList.add('display-none');
+        document.getElementById('add-new-item-container').classList.add('display-none');
+        document.getElementById('list-action-items').classList.remove('list-action-active');
+        document.getElementById('list-action-users').classList.remove('list-action-active');
+        document.getElementById('list-action-logs').classList.add('list-action-active');
+        document.getElementById('users-container').classList.add('display-none');
+        document.getElementById('add-item-toggle-button').innerHTML = '+ Add item';
+        document.getElementById('toggle-add-user-container').classList.add('display-none')
+        document.getElementById('add-user-container').classList.add('display-none')
+        document.getElementById('add-user-message').innerHTML = '';
+        document.getElementById('log-container').classList.remove('display-none');
+
+        build_logs()
+    })
+
 })
 
 
@@ -107,46 +135,68 @@ function build_lists() {
     fetch(`${base_url}/get_lists`)
     .then(response => response.json())
     .then(res => {
+
+        let title = document.createElement('h2');
+        title.innerHTML = 'Your lists';
+        document.getElementById('view-all-lists-container').appendChild(title)
+
         res['Lists'].forEach(list => {
-            build_list_card(list)
+            build_list_card(list, 'owner')
         });
+
+        title = document.createElement('h2');
+        title.innerHTML = 'Lists shared with you';
+        document.getElementById('view-all-lists-container').appendChild(title)
+
+        res['Foreign_lists'].forEach(list => {
+            build_list_card(list, 'foreign')
+        })
     })
 }
 
 
 // Function to build each individual list card in the index page
 // Called by previous build list view function
-function build_list_card(list) {
+// Variables: 
+// - list (json object containing list information)
+// - type (string containing 'owner' or 'foreign', tells if the list belongs to the user logged in or not)
+function build_list_card(list, type) {
     let card = document.createElement('div');
     card.className = 'card list-card';
 
     let list_title = document.createElement('h5');
     list_title.className = 'card-header'
-    list_title.innerHTML = list.list_name;
+    if (type === 'owner') {
+        list_title.innerHTML = list.list_name + ' &#127775';
+    } else {
+        list_title.innerHTML = list.list_name;
+    }
     card.appendChild(list_title);
 
-    let delete_list_span = document.createElement('span');
-    delete_list_span.className = 'delete-list-button-span';
-    list_title.appendChild(delete_list_span);
+    if (type === 'owner') {
+        let delete_list_span = document.createElement('span');
+        delete_list_span.className = 'delete-list-button-span';
+        list_title.appendChild(delete_list_span);
 
-    let delete_list_button = document.createElement('button');
-    delete_list_button.innerHTML = 'Delete';
-    delete_list_button.className = 'btn btn-warning btn-sm delete-list-button';
-    delete_list_button.addEventListener('click', () => {
-        fetch(`${base_url}/delete_list`, {
-            method: 'POST',
-            headers: {'X-CSRFToken': csrftoken},
-            mode: 'same-origin',
-            body: JSON.stringify({
-                'list_to_be_deleted': list.id
+        let delete_list_button = document.createElement('button');
+        delete_list_button.innerHTML = 'Delete';
+        delete_list_button.className = 'btn btn-warning btn-sm delete-list-button';
+        delete_list_button.addEventListener('click', () => {
+            fetch(`${base_url}/delete_list`, {
+                method: 'POST',
+                headers: {'X-CSRFToken': csrftoken},
+                mode: 'same-origin',
+                body: JSON.stringify({
+                    'list_to_be_deleted': list.id
+                })
+            })
+            .then(response => response.json())
+            .then(res => {
+                build_lists()
             })
         })
-        .then(response => response.json())
-        .then(res => {
-            build_lists()
-        })
-    })
-    delete_list_span.appendChild(delete_list_button);
+        delete_list_span.appendChild(delete_list_button);
+    }
 
     let list_body = document.createElement('div');
     list_body.addEventListener('click', () => {
@@ -178,6 +228,7 @@ function build_individual_list(list_id) {
     document.getElementById('view-individual-list-div').classList.remove('display-none');
     document.getElementById('back-button-div').classList.remove('display-none');
     document.getElementById('list-action-items').classList.add('list-action-active');
+    document.getElementById('log-container').classList.add('display-none');
 
     // Fetch items for the list in question
     fetch(`${base_url}/get_list_items/${list_id}`)
@@ -402,14 +453,19 @@ function build_user_view() {
             }
 
             document.getElementById('users-container').appendChild(card)
-        })    
+
+
+        })  
+
+    build_add_user_containers(current_list_id, res.owner, res.logged_user)  
+
     })
 
-    build_add_user_containers(current_list_id)
+    
 }
 
 
-function build_add_user_containers(list_id) {
+function build_add_user_containers(list_id, owner, logged_user) {
 
     // Empty divs
     var div = document.getElementById('toggle-add-user-container');
@@ -424,15 +480,9 @@ function build_add_user_containers(list_id) {
 
     document.getElementById('add-user-message').innerHTML = '';
 
-
-    // Check if current logged in user is the owner of the list, return if not
-    fetch(`${base_url}/get_user_info/${list_id}`)
-    .then(response => response.json())
-    .then(res => {
-        if (res.Owner === false) {
-            return
-        }
-    })
+    if (owner != logged_user) {
+        return
+    }
 
     let input = document.createElement('input');
     input.type = 'text';
@@ -486,4 +536,44 @@ function build_add_user_containers(list_id) {
     })
 
     document.getElementById('toggle-add-user-container').appendChild(button)
+}
+
+
+// Builds log view
+function build_logs() {
+
+    // Empty div
+    var div = document.getElementById('log-container');
+    while(div.firstChild){
+        div.removeChild(div.firstChild);
+    }
+
+    let current_list_id = parseInt(document.getElementById('current-list-id').innerHTML)
+
+    fetch(`${base_url}/get_logs/${current_list_id}`)
+    .then(response => response.json())
+    .then(res => {
+
+        let ul = document.createElement('ul');
+        ul.className = 'list-group'
+
+        res.Log.forEach((log_message) => {
+            let li = document.createElement('li');
+            li.className = 'list-group-item';
+
+            if (log_message.log_action === 'ADD') {
+                li.innerHTML = `<b>${log_message.username}</b> added <b>${log_message.log_item}</b> (${log_message.log_date})`
+            } else if (log_message.log_action === 'DEL') {
+                li.innerHTML = `<b>${log_message.username}</b> removed <b>${log_message.log_item}</b> (${log_message.log_date})`
+            } else if (log_message.log_action === 'DON') {
+                li.innerHTML = `<b>${log_message.username}</b> marked <b>${log_message.log_item}</b> as done (${log_message.log_date})`
+            } else if (log_message.log_action === 'UND') {
+                li.innerHTML = `<b>${log_message.username}</b> marked <b>${log_message.log_item}</b> as undone (${log_message.log_date})`
+            }
+
+            ul.appendChild(li)     
+        })
+
+        document.getElementById('log-container').appendChild(ul)
+    })
 }

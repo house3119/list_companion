@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from .forms import login_form, register_form
-from .models import User, List, List_item
+from .models import User, List, List_item, Log_entry
 
 
 # Default view. Redirect to login, if user is not logged in.
@@ -113,10 +113,12 @@ def get_lists(request):
     if request.method == "GET":
         user = User.objects.get(username=request.user)
         lists = list(List.objects.filter(list_owner=user).all().values())
+        shared_lists = list(user.foreign_lists.all().values())
 
         return JsonResponse({
             "Message": "Success",
             "Lists": lists,
+            "Foreign_lists": shared_lists
             },
             status=200)
     else:
@@ -127,11 +129,16 @@ def delete_list(request):
     if request.method == "POST":
         data = json.loads(request.body)
         list_to_be_deleted_id = data["list_to_be_deleted"]
-        list_owner = User.objects.get(username=request.user)
+        list_owner = List.objects.get(id=list_to_be_deleted_id).list_owner
+        user = User.objects.get(username=request.user)
+
         try:
-            remove = List.objects.get(id=list_to_be_deleted_id, list_owner=list_owner)
-            remove.delete()
-            return JsonResponse({"Message":"Success"}, status=200)
+            if user == list_owner:
+                remove = List.objects.get(id=list_to_be_deleted_id, list_owner=list_owner)
+                remove.delete()
+                return JsonResponse({"Message":"Success"}, status=200)
+            else:
+                return JsonResponse({"Message": "Forbidden"}, status=403)
         except:
             return JsonResponse({"Message":"Something went wrong"}, status=500)  
     else:
@@ -144,6 +151,13 @@ def get_list_items(request, id):
             user = User.objects.get(username=request.user)
             related_list = List.objects.get(id=id)
             if related_list.list_owner == user:
+                list_items = list(List_item.objects.filter(list_item_related_list=related_list).all().values().order_by("list_item_done"))
+                return JsonResponse({
+                    "Message":"Success",
+                    "List_items": list_items
+                    }
+                    , status=200)
+            elif related_list in user.foreign_lists.all():
                 list_items = list(List_item.objects.filter(list_item_related_list=related_list).all().values().order_by("list_item_done"))
                 return JsonResponse({
                     "Message":"Success",
@@ -170,6 +184,18 @@ def add_item(request):
         if user == related_list.list_owner:
             new_item = List_item.objects.create(list_item_name=new_item_name, list_item_related_list=related_list)
             new_item.save()
+
+            log_entry = Log_entry.objects.create(log_action="ADD", log_list=related_list, log_item=new_item.list_item_name, log_user=user)
+            log_entry.save()
+
+            return JsonResponse({"Message":"Success"}, status=200)
+        elif related_list in user.foreign_lists.all():
+            new_item = List_item.objects.create(list_item_name=new_item_name, list_item_related_list=related_list)
+            new_item.save()
+
+            log_entry = Log_entry.objects.create(log_action="ADD", log_list=related_list, log_item=new_item.list_item_name, log_user=user)
+            log_entry.save()
+
             return JsonResponse({"Message":"Success"}, status=200)
         else:
             return JsonResponse({"Message":"Wrong user"}, status=404)      
@@ -181,9 +207,17 @@ def delete_item(request):
     if request.method == "POST":
         data = json.loads(request.body)
         item_id = data["item_to_be_deleted"]
+        user = User.objects.get(username=request.user)
 
         try:
-            List_item.objects.get(id=item_id).delete()
+            item_to_be_deleted = List_item.objects.get(id=item_id)
+            related_list = item_to_be_deleted.list_item_related_list
+
+            log_entry = Log_entry.objects.create(log_action="DEL", log_list=related_list, log_item=item_to_be_deleted.list_item_name, log_user=user)
+            log_entry.save()
+
+            item_to_be_deleted.delete()
+
             return JsonResponse({"Message":"Success"}, status=200)   
         except:
             return JsonResponse({"Message":"Error"}, status=404) 
@@ -197,15 +231,24 @@ def item_done(request):
         item_id = data["item"]
         done = data["done"]
         item = List_item.objects.get(id=item_id)
+        user = User.objects.get(username=request.user)
 
         try:
             if done == True:
                 item.list_item_done = True
                 item.save()
+
+                log_entry = Log_entry.objects.create(log_action="DON", log_list=item.list_item_related_list, log_item=item.list_item_name, log_user=user)
+                log_entry.save()
+
                 return JsonResponse({"Message":"Success"}, status=200)
             else:
                 item.list_item_done = False
                 item.save()
+
+                log_entry = Log_entry.objects.create(log_action="UND", log_list=item.list_item_related_list, log_item=item.list_item_name, log_user=user)
+                log_entry.save()
+
                 return JsonResponse({"Message":"Success"}, status=200)            
         except:
             return JsonResponse({"Message":"Error"}, status=404) 
@@ -255,19 +298,6 @@ def remove_user_from_list(request):
         return JsonResponse({"Message": "Only POST allowed"}, status=403)
     
 
-def get_user_info(request, id):
-    try:
-        user = User.objects.get(username=request.user)
-        owner = List.objects.get(id=id).list_owner
-
-        if user == owner:
-            return JsonResponse({"Owner": True}, status=200)
-        else:
-            return JsonResponse({"Owner": False}, status=200)
-    except:
-        return JsonResponse({"Message": "Error"}, status=404)
-    
-
 def add_user(request):
     try:
         data = json.loads(request.body)
@@ -312,3 +342,33 @@ def add_user(request):
     except:
         return JsonResponse({"Message": "Error"}, status=500)
 
+
+def get_logs(request, id):
+    try:
+        user = User.objects.get(username=request.user)
+        related_list = List.objects.get(id=id)
+        followers = related_list.list_additional_users
+        owner = related_list.list_owner
+
+        if user == owner or user in followers:
+            log = list(related_list.list_logs.all().values().order_by("-log_date"))
+            for message in log:
+                message["username"] = User.objects.get(id=message["log_user_id"]).username
+                message["log_date"] = message["log_date"].strftime("%d/%m/%Y, %H:%M")
+            return JsonResponse({
+                "Message": "Success",
+                "Log": log,
+            },
+            status=200)
+        
+        else:
+            return JsonResponse({
+                "Message": "Forbidden"
+            },
+            status=403)
+        
+    except:
+        return JsonResponse({
+            "Message": "Error"
+            },
+            status=500)

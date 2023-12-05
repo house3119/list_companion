@@ -17,6 +17,6 @@ urlpatterns = [
     path("item_done", views.item_done, name="item_done"),
     path("get_users/<int:id>", views.get_users, name="get_users"),
     path("remove_user_from_list", views.remove_user_from_list, name="remove_user_from_list"),
-    path("get_user_info/<int:id>", views.get_user_info, name="get_user_info"),
-    path("add_user", views.add_user, name="add_user")
+    path("add_user", views.add_user, name="add_user"),
+    path("get_logs/<int:id>", views.get_logs, name="get_logs")
 ]
