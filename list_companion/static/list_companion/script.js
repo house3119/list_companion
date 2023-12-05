@@ -182,6 +182,11 @@ function build_list_card(list, type) {
         delete_list_button.innerHTML = 'Delete';
         delete_list_button.className = 'btn btn-warning btn-sm delete-list-button';
         delete_list_button.addEventListener('click', () => {
+            let confirm = ConfirmDelete()
+            if (confirm === false) {
+                return
+            }
+
             fetch(`${base_url}/delete_list`, {
                 method: 'POST',
                 headers: {'X-CSRFToken': csrftoken},
@@ -309,6 +314,11 @@ function build_individual_list_item(item, list_id) {
     delete_item_button.innerHTML = 'Remove';
     delete_item_button.className = 'btn btn-warning btn-sm delete-list-button';
     delete_item_button.addEventListener('click', () => {
+        let confirm = ConfirmDelete()
+        if (confirm === false) {
+            return
+        }
+
         fetch(`${base_url}/delete_item`, {
             method: 'POST',
             headers: {'X-CSRFToken': csrftoken},
@@ -435,6 +445,11 @@ function build_user_view() {
                 delete_item_button.innerHTML = 'Remove';
                 delete_item_button.className = 'btn btn-warning btn-sm delete-list-button';
                 delete_item_button.addEventListener('click', () => {
+                    let confirm = ConfirmDelete()
+                    if (confirm === false) {
+                        return
+                    }
+
                     fetch(`${base_url}/remove_user_from_list`, {
                         method: 'POST',
                         headers: {'X-CSRFToken': csrftoken},
@@ -576,4 +591,10 @@ function build_logs() {
 
         document.getElementById('log-container').appendChild(ul)
     })
+}
+
+
+// Confirm deletions in multiple places
+function ConfirmDelete() {
+  return confirm("Are you sure?");
 }
