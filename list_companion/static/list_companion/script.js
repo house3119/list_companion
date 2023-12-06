@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('back-button').addEventListener('click', () => {
         document.getElementById('view-all-lists-div').classList.remove('display-none');
         document.getElementById('view-individual-list-div').classList.add('display-none');
-        document.getElementById('back-button-div').classList.add('display-none');
+        document.getElementById('back-button').classList.add('display-none');
 
         document.getElementById('list-items-container').classList.add('display-none');
         document.getElementById('toggle-add-new-item-container').classList.add('display-none');
@@ -57,6 +57,8 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('add-user-container').classList.add('display-none')
         document.getElementById('add-user-message').innerHTML = '';
         document.getElementById('list-action-logs').classList.remove('list-action-active');
+
+        document.getElementById('nav-title').innerHTML = 'List Companion';
         
     })
 
@@ -136,7 +138,7 @@ function build_lists() {
     .then(response => response.json())
     .then(res => {
 
-        let title = document.createElement('h2');
+        let title = document.createElement('h4');
         title.innerHTML = 'Your lists';
         document.getElementById('view-all-lists-container').appendChild(title)
 
@@ -144,7 +146,7 @@ function build_lists() {
             build_list_card(list, 'owner')
         });
 
-        title = document.createElement('h2');
+        title = document.createElement('h4');
         title.innerHTML = 'Lists shared with you';
         document.getElementById('view-all-lists-container').appendChild(title)
 
@@ -201,6 +203,27 @@ function build_list_card(list, type) {
             })
         })
         delete_list_span.appendChild(delete_list_button);
+
+    } else {
+        let unsub_list_span = document.createElement('span');
+        unsub_list_span.className = 'unsub-button-span';
+        list_title.appendChild(unsub_list_span);
+
+        let unsub_list_button = document.createElement('button');
+        unsub_list_button.innerHTML = 'Unsub';
+        unsub_list_button.className = 'btn btn-warning btn-sm unsub-button';
+        unsub_list_button.addEventListener('click', () => {
+            let confirm = ConfirmDelete()
+            if (confirm === false) {
+                return
+            }
+
+
+        })
+
+        unsub_list_span.appendChild(unsub_list_button);
+
+
     }
 
     let list_body = document.createElement('div');
@@ -210,6 +233,7 @@ function build_list_card(list, type) {
         document.getElementById('list-items-container').classList.remove('display-none');
         document.getElementById('toggle-add-new-item-container').classList.remove('display-none');
         document.getElementById('add-new-item-container').classList.add('display-none');
+        document.getElementById('nav-title').innerHTML = list.list_name;
 
         document.getElementById('current-list-id').innerHTML = list.id;
     })
@@ -231,9 +255,10 @@ function build_individual_list(list_id) {
     // First set the visibilities for page components and adds active class for 'items' button in the top row
     document.getElementById('view-all-lists-div').classList.add('display-none');
     document.getElementById('view-individual-list-div').classList.remove('display-none');
-    document.getElementById('back-button-div').classList.remove('display-none');
+    document.getElementById('back-button').classList.remove('display-none');
     document.getElementById('list-action-items').classList.add('list-action-active');
     document.getElementById('log-container').classList.add('display-none');
+    
 
     // Fetch items for the list in question
     fetch(`${base_url}/get_list_items/${list_id}`)

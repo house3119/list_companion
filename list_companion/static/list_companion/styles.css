@@ -47,3 +47,13 @@ body {
     border-color: black;
     color: black;
 }
+
+.unsub-button-span {
+    float: right;
+}
+
+.unsub-button:hover {
+    box-shadow: 2px 2px 4px #888888;
+}
+
+
