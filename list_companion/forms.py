@@ -66,3 +66,58 @@ class new_list(forms.Form):
         super(new_list, self).__init__(*args, **kwargs)
         for visible in self.visible_fields():
             visible.field.widget.attrs["class"] = "form-control"
+
+
+class change_password_form(forms.Form):
+    current_password = forms.CharField(
+        widget=PasswordInput(),
+        label="Current Password",
+        min_length=1,
+        max_length=30
+    )
+
+    new_password = forms.CharField(
+        widget=PasswordInput(),
+        label="New Password",
+        min_length=1,
+        max_length=30
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(change_password_form, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs["class"] = "form-control"
+
+
+class change_email_form(forms.Form):
+    current_password = forms.CharField(
+        widget=PasswordInput(),
+        label="Password",
+        min_length=1,
+        max_length=30
+    )
+
+    new_email = forms.EmailField(
+        label="New Email Address",
+        min_length=1,
+        max_length=30
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(change_email_form, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs["class"] = "form-control"
+
+
+class delete_account_form(forms.Form):
+    current_password = forms.CharField(
+        widget=PasswordInput(),
+        label="Password",
+        min_length=1,
+        max_length=30
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(delete_account_form, self).__init__(*args, **kwargs)
+        for visible in self.visible_fields():
+            visible.field.widget.attrs["class"] = "form-control"

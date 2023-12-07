@@ -18,5 +18,10 @@ urlpatterns = [
     path("get_users/<int:id>", views.get_users, name="get_users"),
     path("remove_user_from_list", views.remove_user_from_list, name="remove_user_from_list"),
     path("add_user", views.add_user, name="add_user"),
-    path("get_logs/<int:id>", views.get_logs, name="get_logs")
+    path("get_logs/<int:id>", views.get_logs, name="get_logs"),
+    path("unsub", views.unsub, name="unsub"),
+    path("account", views.account, name="account"),
+    path("change_password", views.change_password, name="change_password"),
+    path("change_email", views.change_email, name="change_email"),
+    path("delete_account", views.delete_account, name="delete_account")
 ]

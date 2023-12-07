@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 
-from .forms import login_form, register_form
+from .forms import login_form, register_form, change_password_form, change_email_form, delete_account_form
 from .models import User, List, List_item, Log_entry
 
 
@@ -372,3 +372,137 @@ def get_logs(request, id):
             "Message": "Error"
             },
             status=500)
+
+
+def unsub(request):
+    if request.method == "POST":
+        try:
+            user = User.objects.get(username=request.user)
+            data = json.loads(request.body)
+            list_to_unsub = List.objects.get(id=data["list_to_unsub"]["id"])
+
+            list_to_unsub.list_additional_users.remove(user)
+            list_to_unsub.save()
+
+            return JsonResponse({"Message": "Success"}, status=200)
+        except:
+            return JsonResponse({"Message": "Error"}, status=500)
+    else:
+        return JsonResponse({"Message": "Only POST requests"}, status=403)
+    
+
+def account(request):
+    if request.user.is_authenticated:
+        return render(request, "list_companion/account.html", {
+            "account": User.objects.get(username=request.user),
+            "change_password_form": change_password_form,
+            "change_email_form": change_email_form,
+            "delete_account_form": delete_account_form
+        })
+    else:
+        return HttpResponseRedirect(reverse("login"))
+    
+
+def change_password(request):
+    if request.method == "POST":
+        old_password = request.POST["current_password"]
+        new_password = request.POST["new_password"]
+
+        try:
+            user = authenticate(username=request.user, password=old_password)
+            if user != None:
+                user.set_password(new_password)
+                user.save()
+                return render(request, "list_companion/account.html", {
+                        "account": User.objects.get(username=request.user),
+                        "change_password_form": change_password_form,
+                        "change_email_form": change_email_form,
+                        "delete_account_form": delete_account_form,
+                        "message": "Password change succesful"
+                })
+            else:
+                return render(request, "list_companion/account.html", {
+                        "account": User.objects.get(username=request.user),
+                        "change_password_form": change_password_form,
+                        "change_email_form": change_email_form,
+                        "delete_account_form": delete_account_form,
+                        "message": "Wrong Password"
+                })
+        except:
+            return render(request, "list_companion/account.html", {
+                        "account": User.objects.get(username=request.user),
+                        "change_password_form": change_password_form,
+                        "change_email_form": change_email_form,
+                        "delete_account_form": delete_account_form,
+                        "message": "Unexpected Error"
+            })
+    else:
+        return HttpResponseRedirect(reverse("account"))
+
+
+def change_email(request):
+    if request.method == "POST":
+
+        password = request.POST["current_password"]
+        new_email = request.POST["new_email"]
+
+        try:
+            user = authenticate(username=request.user, password=password)
+            if user != None:
+                user.email = new_email
+                user.save()
+
+                return render(request, "list_companion/account.html", {
+                    "account": User.objects.get(username=request.user),
+                    "change_password_form": change_password_form,
+                    "change_email_form": change_email_form,
+                    "delete_account_form": delete_account_form,
+                    "message": "Email change successful"
+                })
+            else:
+                return render(request, "list_companion/account.html", {
+                    "account": User.objects.get(username=request.user),
+                    "change_password_form": change_password_form,
+                    "change_email_form": change_email_form,
+                    "delete_account_form": delete_account_form,
+                    "message": "Wrong Password"
+                })
+        except:
+            return render(request, "list_companion/account.html", {
+                "account": User.objects.get(username=request.user),
+                "change_password_form": change_password_form,
+                "change_email_form": change_email_form,
+                "delete_account_form": delete_account_form,
+                "message": "Unexpected Error"
+            })
+
+    else:
+        return HttpResponseRedirect(reverse("account"))
+    
+
+def delete_account(request):
+    if request.method == "POST":
+        password = request.POST["current_password"]
+        try:
+            user = authenticate(username=request.user, password=password)
+            if user != None:
+                user.delete()
+                return HttpResponseRedirect(reverse("index"))
+            else:
+                return render(request, "list_companion/account.html", {
+                    "account": User.objects.get(username=request.user),
+                    "change_password_form": change_password_form,
+                    "change_email_form": change_email_form,
+                    "delete_account_form": delete_account_form,
+                    "message": "Wrong Password"
+                })
+        except:
+            return render(request, "list_companion/account.html", {
+                    "account": User.objects.get(username=request.user),
+                    "change_password_form": change_password_form,
+                    "change_email_form": change_email_form,
+                    "delete_account_form": delete_account_form,
+                    "message": "Unexpected Error"
+                })
+    else:
+        return JsonResponse({"Message": "Forbidden"},status=403)

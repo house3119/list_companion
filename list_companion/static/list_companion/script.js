@@ -5,7 +5,27 @@ const base_url = 'http://127.0.0.1:8000';
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // Build the list view once the index page is loaded
+    // Show correct navbar (mobile vs desktop)
+    if (window.innerWidth >= 428) {
+        document.getElementById('mobile-navbar').classList.add('display-none')
+        document.getElementById('desktop-navbar').classList.remove('display-none')
+    } else {
+        document.getElementById('mobile-navbar').classList.remove('display-none')
+        document.getElementById('desktop-navbar').classList.add('display-none')
+    }
+
+    window.addEventListener('resize',() => {
+        if (window.innerWidth >= 428) {
+            document.getElementById('mobile-navbar').classList.add('display-none')
+            document.getElementById('desktop-navbar').classList.remove('display-none')
+        } else {
+            document.getElementById('mobile-navbar').classList.remove('display-none')
+            document.getElementById('desktop-navbar').classList.add('display-none')
+        }
+    })
+
+
+    // Build the list view
     build_lists()
 
 
@@ -138,17 +158,17 @@ function build_lists() {
     .then(response => response.json())
     .then(res => {
 
-        let title = document.createElement('h4');
-        title.innerHTML = 'Your lists';
-        document.getElementById('view-all-lists-container').appendChild(title)
+        // let title = document.createElement('h4');
+        // title.innerHTML = 'Your lists';
+        // document.getElementById('view-all-lists-container').appendChild(title)
 
         res['Lists'].forEach(list => {
             build_list_card(list, 'owner')
         });
 
-        title = document.createElement('h4');
-        title.innerHTML = 'Lists shared with you';
-        document.getElementById('view-all-lists-container').appendChild(title)
+        // title = document.createElement('h4');
+        // title.innerHTML = 'Lists shared with you';
+        // document.getElementById('view-all-lists-container').appendChild(title)
 
         res['Foreign_lists'].forEach(list => {
             build_list_card(list, 'foreign')
@@ -164,7 +184,7 @@ function build_lists() {
 // - type (string containing 'owner' or 'foreign', tells if the list belongs to the user logged in or not)
 function build_list_card(list, type) {
     let card = document.createElement('div');
-    card.className = 'card list-card';
+    card.className = 'card list-card mb-3';
 
     let list_title = document.createElement('h5');
     list_title.className = 'card-header'
@@ -218,6 +238,18 @@ function build_list_card(list, type) {
                 return
             }
 
+            fetch(`${base_url}/unsub`, {
+                method: 'POST',
+                headers: {'X-CSRFToken': csrftoken},
+                mode: 'same-origin',
+                body: JSON.stringify({
+                    'list_to_unsub': list,
+                })
+            })
+            .then(response => response.json())
+            .then(res => {
+                build_lists()
+            })
 
         })
 
@@ -244,6 +276,11 @@ function build_list_card(list, type) {
     list_text.className = 'card-text';
     list_text.innerHTML = list.list_description;
     list_body.appendChild(list_text);
+
+    // list_text = document.createElement('p');
+    // list_text.className = 'card-text';
+    // list_text.innerHTML = list;
+    // list_body.appendChild(list_text);
 
     document.getElementById('view-all-lists-container').appendChild(card);
 }
@@ -312,6 +349,8 @@ function build_individual_list_item(item, list_id) {
     checkbox.classList = 'form-check-input list-item-done-checkbox';
     if (item.list_item_done == true) {
         checkbox.checked = true;
+        card.classList.add('bg-body-tertiary');
+        list_text.classList.add('text-secondary')
     }
     checkbox.addEventListener('change', () => {
         fetch(`${base_url}/item_done`, {
