@@ -112,13 +112,40 @@ def add_list(request):
 def get_lists(request):
     if request.method == "GET":
         user = User.objects.get(username=request.user)
-        lists = list(List.objects.filter(list_owner=user).all().values())
-        shared_lists = list(user.foreign_lists.all().values())
+
+        # Add additional users and owner to json to be returned
+        lists = List.objects.filter(list_owner=user).all()
+        lists_json = list(lists.values())
+
+        helper = 0
+        for i in lists:
+            holder = []
+            for j in i.list_additional_users.all():
+                holder.append(j.username)
+            
+            lists_json[helper]["additional_users"] = holder
+            lists_json[helper]["owner_username"] = user.username
+            helper += 1
+
+
+        shared_lists = user.foreign_lists.all()
+        shared_lists_json = list(shared_lists.values())
+
+        helper = 0
+        for i in shared_lists:
+            holder = []
+            for j in i.list_additional_users.all():
+                holder.append(j.username)
+            
+            shared_lists_json[helper]["additional_users"] = holder
+            shared_lists_json[helper]["owner_username"] = User.objects.get(id=shared_lists_json[helper]["list_owner_id"]).username
+            helper += 1
+        
 
         return JsonResponse({
             "Message": "Success",
-            "Lists": lists,
-            "Foreign_lists": shared_lists
+            "Lists": lists_json,
+            "Foreign_lists": shared_lists_json
             },
             status=200)
     else:

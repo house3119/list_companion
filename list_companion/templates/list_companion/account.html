@@ -13,11 +13,11 @@
             <h3 id="account-title">Account Management</h3>
             <div id="account-buttons-div">
                 <p>Logged in as {{ account }}</p>
-                <button class="btn btn-primary btn-sm" id="change-password-button">Change Password</button>
+                <button class="btn btn-primary mb-2" id="change-password-button">Change Password</button>
                 <br>
-                <button class="btn btn-primary btn-sm" id="change-email-button">Change Email</button>
+                <button class="btn btn-primary mb-2" id="change-email-button">Change Email</button>
                 <br>
-                <button class="btn btn-warning btn-sm" id="delete-account-button">Delete Account</button>
+                <button class="btn btn-warning" id="delete-account-button">Delete Account</button>
                 </div>
             </div>
             <div id="message-div">
@@ -32,8 +32,10 @@
             <form action="{% url 'change_password' %}" method="post" novalidate id="change-password-form">
                 {% csrf_token %}
                 {{ change_password_form }}
-                <button type="submit" class="btn btn-primary">Submit</button>
-                <button class="btn btn-secondary" id="change-password-cancel">Cancel</button>
+                <div class="mt-2">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button class="btn btn-secondary" id="change-password-cancel">Cancel</button>
+                </div>
             </form>
         </div>
 
@@ -42,8 +44,10 @@
             <form action="{% url 'change_email' %}" method="post" novalidate id="change-email-form">
                 {% csrf_token %}
                 {{ change_email_form }}
-                <button type="submit" class="btn btn-primary">Submit</button>
-                <button class="btn btn-secondary" id="change-email-cancel">Cancel</button>
+                <div class="mt-2">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button class="btn btn-secondary" id="change-email-cancel">Cancel</button>
+                </div>
             </form>
         </div>
 
@@ -52,8 +56,10 @@
             <form action="{% url 'delete_account' %}" method="post" novalidate id="delete-account-form">
                 {% csrf_token %}
                 {{ delete_account_form }}
-                <button type="submit" class="btn btn-warning" id="delete-account-submit-button">Delete</button>
-                <button class="btn btn-secondary" id="delete-account-cancel">Cancel</button>
+                <div class="mt-2">
+                    <button type="submit" class="btn btn-warning" id="delete-account-submit-button">Delete</button>
+                    <button class="btn btn-secondary" id="delete-account-cancel">Cancel</button>
+                </div>
             </form>
         </div>
 

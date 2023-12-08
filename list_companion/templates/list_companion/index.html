@@ -8,7 +8,7 @@
 
 {% block body %}
 
-    <body>
+    <body class="mb-4">
         
         <div class="container" style="display:none">
             <a href="{% url 'logout' %}">Log out</a>
@@ -22,15 +22,15 @@
         
             </div>
 
-            <div class="container">
+            <div class="container mb-2">
                 <button type="button" class="btn btn-primary" id="toggle-create-new-list-div-button">
                     + Create new list
                 </button>
             </div>
 
             <div id="create-new-list-div" class="container" style="display:none">
-                <input id="new-list-name" type="text" placeholder="Name" name="new-list-name" class="form-control">
-                <input id="new-list-description" type="text" placeholder="Description" name="new-list-description" class="form-control">
+                <input id="new-list-name" type="text" placeholder="Name" name="new-list-name" class="form-control mb-2">
+                <input id="new-list-description" type="text" placeholder="Description" name="new-list-description" class="form-control mb-2">
                 <button id="create-new-list-button" type="button" class="btn btn-primary">Create</button>
             </div>
         </div>
@@ -40,9 +40,9 @@
         <div id="view-individual-list-div" class="display-none">
             <div class="container">
                 <div class="btn-group" role="group" aria-label="Basic example">
-                    <button type="button" class="btn btn-primary" id="list-action-items">Items</button>
-                    <button type="button" class="btn btn-primary" id="list-action-users">Users</button>
-                    <button type="button" class="btn btn-primary" id="list-action-logs">Logs</button>
+                    <button type="button" class="btn btn-light" id="list-action-items">Items</button>
+                    <button type="button" class="btn btn-light" id="list-action-users">Users</button>
+                    <button type="button" class="btn btn-light" id="list-action-logs">Logs</button>
                 </div>
             </div>
             <div class="container" id="list-items-container">

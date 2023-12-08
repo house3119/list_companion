@@ -53,6 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (document.getElementById('create-new-list-div').style.display === 'none') {
             document.getElementById('create-new-list-div').style.display = 'block';
             document.getElementById('toggle-create-new-list-div-button').innerHTML = '- Create new list'
+            document.getElementById('new-list-name').focus()
         } else {
             document.getElementById('create-new-list-div').style.display = 'none';
             document.getElementById('toggle-create-new-list-div-button').innerHTML = '+ Create new list'
@@ -157,6 +158,7 @@ function build_lists() {
     fetch(`${base_url}/get_lists`)
     .then(response => response.json())
     .then(res => {
+        console.log(res)
 
         // let title = document.createElement('h4');
         // title.innerHTML = 'Your lists';
@@ -202,7 +204,7 @@ function build_list_card(list, type) {
 
         let delete_list_button = document.createElement('button');
         delete_list_button.innerHTML = 'Delete';
-        delete_list_button.className = 'btn btn-warning btn-sm delete-list-button';
+        delete_list_button.className = 'btn btn-danger btn-sm delete-list-button';
         delete_list_button.addEventListener('click', () => {
             let confirm = ConfirmDelete()
             if (confirm === false) {
@@ -277,10 +279,17 @@ function build_list_card(list, type) {
     list_text.innerHTML = list.list_description;
     list_body.appendChild(list_text);
 
-    // list_text = document.createElement('p');
-    // list_text.className = 'card-text';
-    // list_text.innerHTML = list;
-    // list_body.appendChild(list_text);
+    list_text = document.createElement('p');
+    list_text.className = 'card-text';
+    list_text.innerHTML = `&#128081 <b>${list.owner_username}</b>`;
+    let length = list.additional_users.length
+    if (length != 0) {
+        list_text.innerHTML += ` + ${length} others`
+    }
+    //list.additional_users.forEach((usr) => {
+    //    list_text.innerHTML += `&#128100 ${usr}`
+    //})
+    list_body.appendChild(list_text);
 
     document.getElementById('view-all-lists-container').appendChild(card);
 }
@@ -408,7 +417,7 @@ function build_add_item_containers(list_id) {
 
     let input = document.createElement('input');
     input.type = 'text';
-    input.classList = 'form-control';
+    input.classList = 'form-control mb-2';
     input.placeholder = 'Name';
     input.id = 'add-new-item-input';
     document.getElementById('add-new-item-container').appendChild(input)
@@ -436,13 +445,14 @@ function build_add_item_containers(list_id) {
     document.getElementById('add-new-item-container').appendChild(button)
 
     button = document.createElement('button');
-    button.classList = 'btn btn-primary';
+    button.classList = 'btn btn-primary mb-2 mt-2';
     button.id = 'add-item-toggle-button'
     button.innerHTML = '+ Add item';
     button.addEventListener('click', () => {
         if (document.getElementById('add-new-item-container').classList.contains('display-none')) {
             document.getElementById('add-new-item-container').classList.remove('display-none')
             button.innerHTML = '- Add item';
+            document.getElementById('add-new-item-input').focus()
         } else {
             document.getElementById('add-new-item-container').classList.add('display-none')
             button.innerHTML = '+ Add item';
@@ -565,8 +575,8 @@ function build_add_user_containers(list_id, owner, logged_user) {
 
     let input = document.createElement('input');
     input.type = 'text';
-    input.classList = 'form-control';
-    input.placeholder = 'Username';
+    input.classList = 'form-control mb-2';
+    input.placeholder = 'User';
     input.id = 'add-user-input';
     document.getElementById('add-user-container').appendChild(input)
 
@@ -601,12 +611,13 @@ function build_add_user_containers(list_id, owner, logged_user) {
     document.getElementById('add-user-container').appendChild(button)
 
     button = document.createElement('button');
-    button.classList = 'btn btn-primary';
+    button.classList = 'btn btn-primary mb-2 mt-2';
     button.innerHTML = '+ Add user';
     button.addEventListener('click', () => {
         if (document.getElementById('add-user-container').classList.contains('display-none')) {
             document.getElementById('add-user-container').classList.remove('display-none')
             button.innerHTML = '- Add user';
+            document.getElementById('add-user-input').focus()
         } else {
             document.getElementById('add-user-container').classList.add('display-none')
             button.innerHTML = '+ Add user';
