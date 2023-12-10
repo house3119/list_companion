@@ -15,7 +15,7 @@
                 <p>Logged in as {{ account }}</p>
                 <button class="btn btn-primary mb-2" id="change-password-button">Change Password</button>
                 <br>
-                <button class="btn btn-primary mb-2" id="change-email-button">Change Email</button>
+                <button class="btn btn-primary mb-2" id="change-email-button">Change Email Address</button>
                 <br>
                 <button class="btn btn-warning" id="delete-account-button">Delete Account</button>
                 </div>
@@ -40,7 +40,7 @@
         </div>
 
         <div class="container display-none" id="change-email-div">
-            <h3>Change Email</h3>
+            <h3>Change Email Address</h3>
             <form action="{% url 'change_email' %}" method="post" novalidate id="change-email-form">
                 {% csrf_token %}
                 {{ change_email_form }}

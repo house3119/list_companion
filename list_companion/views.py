@@ -181,14 +181,16 @@ def get_list_items(request, id):
                 list_items = list(List_item.objects.filter(list_item_related_list=related_list).all().values().order_by("list_item_done"))
                 return JsonResponse({
                     "Message":"Success",
-                    "List_items": list_items
+                    "List_items": list_items,
+                    "List_name": related_list.list_name
                     }
                     , status=200)
             elif related_list in user.foreign_lists.all():
                 list_items = list(List_item.objects.filter(list_item_related_list=related_list).all().values().order_by("list_item_done"))
                 return JsonResponse({
                     "Message":"Success",
-                    "List_items": list_items
+                    "List_items": list_items,
+                    "List_name": related_list.list_name
                     }
                     , status=200)
             else:

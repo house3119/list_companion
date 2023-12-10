@@ -5,12 +5,31 @@ body {
 
 }
 
-.card {
+.custom-list-card-1 {
+    box-shadow: 1px 1px 3px #888888;
+}
+
+.custom-list-card-2 {
+
     margin-bottom: -1px;
+    border-radius: 0;
+
+}
+
+.last-item-card {
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.custom-user-ul {
+    border-radius: 0;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+
 }
 
 .btn-light {
-
+    
 }
 
 .display-none {
@@ -33,15 +52,19 @@ body {
     cursor: pointer;
 }
 
-
+.list-action {
+    border: 1px solid #CFCFCF;
+    border-bottom: 0px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    color: dimgray;
+}
 
 .list-action-active {
     color: black;
     background-color: white;
-    border:none;
-    border-radius: 0px;
-
     font-weight: bold;
+    
 }
 
 .list-action-active:hover {
@@ -50,19 +73,16 @@ body {
 }
 
 
-
-
-
-
-
 .list-item-done-checkbox {
     margin-right: 10px;
+    width: 20px;
+    height: 20px;
 }
 
 .list-item-done-checkbox:checked {
     background-color: forestgreen;
-    border-color: black;
-    color: black;
+    border-color: forestgreen;
+    /* color: black; */
 }
 
 .unsub-button-span {

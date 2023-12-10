@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block body %}
-    <div class="container">
+    <div class="container w-75">
         <body>
             <h2>Login</h2>
             {% if message %}
@@ -16,10 +16,10 @@
             <form action="{% url 'login' %}" method="post">
                 {% csrf_token %}
                 {{ login_form }}
-                <button type="submit" class="btn btn-primary">Login</button>
+                <button type="submit" class="btn btn-primary my-2">Login</button>
             </form>
             <a href="{% url 'register' %}">
-                No account yet? Register here.
+                No account yet? Register here
             </a>
         </body>
     </div> 

@@ -1,6 +1,7 @@
 
 const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 const base_url = 'http://127.0.0.1:8000';
+var desktop_view = true
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -9,18 +10,22 @@ document.addEventListener('DOMContentLoaded', () => {
     if (window.innerWidth >= 428) {
         document.getElementById('mobile-navbar').classList.add('display-none')
         document.getElementById('desktop-navbar').classList.remove('display-none')
+        desktop_view = true
     } else {
         document.getElementById('mobile-navbar').classList.remove('display-none')
         document.getElementById('desktop-navbar').classList.add('display-none')
+        desktop_view = false
     }
 
     window.addEventListener('resize',() => {
         if (window.innerWidth >= 428) {
             document.getElementById('mobile-navbar').classList.add('display-none')
             document.getElementById('desktop-navbar').classList.remove('display-none')
+            desktop_view = true
         } else {
             document.getElementById('mobile-navbar').classList.remove('display-none')
             document.getElementById('desktop-navbar').classList.add('display-none')
+            desktop_view = false
         }
     })
 
@@ -186,7 +191,7 @@ function build_lists() {
 // - type (string containing 'owner' or 'foreign', tells if the list belongs to the user logged in or not)
 function build_list_card(list, type) {
     let card = document.createElement('div');
-    card.className = 'card list-card mb-3';
+    card.className = 'card list-card mb-3 custom-list-card-1';
 
     let list_title = document.createElement('h5');
     list_title.className = 'card-header'
@@ -203,7 +208,7 @@ function build_list_card(list, type) {
         list_title.appendChild(delete_list_span);
 
         let delete_list_button = document.createElement('button');
-        delete_list_button.innerHTML = 'Delete';
+        delete_list_button.innerHTML = 'Delete List';
         delete_list_button.className = 'btn btn-danger btn-sm delete-list-button';
         delete_list_button.addEventListener('click', () => {
             let confirm = ConfirmDelete()
@@ -232,7 +237,7 @@ function build_list_card(list, type) {
         list_title.appendChild(unsub_list_span);
 
         let unsub_list_button = document.createElement('button');
-        unsub_list_button.innerHTML = 'Unsub';
+        unsub_list_button.innerHTML = 'Unsubscribe';
         unsub_list_button.className = 'btn btn-warning btn-sm unsub-button';
         unsub_list_button.addEventListener('click', () => {
             let confirm = ConfirmDelete()
@@ -310,6 +315,10 @@ function build_individual_list(list_id) {
     fetch(`${base_url}/get_list_items/${list_id}`)
     .then(response => response.json())
     .then(res => {
+        if (desktop_view === true) {
+            document.getElementById('desktop-list-name').innerHTML = res["List_name"]
+        }
+
         // Empty the list items container
         var div = document.getElementById('list-items-container');
         while(div.firstChild){
@@ -317,8 +326,16 @@ function build_individual_list(list_id) {
         }
         
         // Builds card for each item in the list and adds them to item container
+        let length= res["List_items"].length
+        let counter = 0
         res["List_items"].forEach(item => {
-            build_individual_list_item(item, list_id)
+            counter += 1
+            if (counter != length) {
+                build_individual_list_item(item, list_id, false)
+            } else {
+                build_individual_list_item(item, list_id, true)
+            }
+            
         })
 
     })
@@ -340,9 +357,13 @@ function build_individual_list(list_id) {
 
 
 // Function to build card for each item in a list
-function build_individual_list_item(item, list_id) {
+function build_individual_list_item(item, list_id, last) {
     let card = document.createElement('div');
-    card.className = 'card list-card';
+    if (last === true) {
+        card.className = 'card list-card custom-list-card-2 last-item-card';
+    } else {
+        card.className = 'card list-card custom-list-card-2';
+    }
 
     let list_body = document.createElement('div');
     list_body.className = 'card-body';
@@ -482,7 +503,8 @@ function build_user_view() {
 
         // Add list owner first
         let card = document.createElement('div');
-        card.className = 'card list-card';
+        card.className = 'card list-card custom-list-card-2';
+        card.id = 'list-owner-card'
 
         let list_body = document.createElement('div');
         list_body.className = 'card-body';
@@ -496,9 +518,19 @@ function build_user_view() {
         document.getElementById('users-container').appendChild(card)
 
         // Add additional users
+        let length = res.additional_users.length
+        if (length === 0) {
+            card.classList.add('last-item-card')
+        }
+        let counter = 0
         res.additional_users.forEach((user) => {
+            counter += 1;
             card = document.createElement('div');
-            card.className = 'card list-card';
+            if (counter === length) {
+                card.className = 'card list-card custom-list-card-2 last-item-card';
+            } else {
+                card.className = 'card list-card custom-list-card-2';
+            }
 
             let list_body = document.createElement('div');
             list_body.className = 'card-body';
@@ -645,7 +677,7 @@ function build_logs() {
     .then(res => {
 
         let ul = document.createElement('ul');
-        ul.className = 'list-group'
+        ul.className = 'list-group custom-user-ul'
 
         res.Log.forEach((log_message) => {
             let li = document.createElement('li');
