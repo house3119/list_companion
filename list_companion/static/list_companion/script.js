@@ -84,7 +84,8 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('add-user-message').innerHTML = '';
         document.getElementById('list-action-logs').classList.remove('list-action-active');
 
-        document.getElementById('nav-title').innerHTML = 'List Companion';
+        // document.getElementById('nav-list-name').classList.add('display-none');
+        document.getElementById('nav-brand-img-mobile').classList.remove('display-none');
         
     })
 
@@ -163,7 +164,10 @@ function build_lists() {
     fetch(`${base_url}/get_lists`)
     .then(response => response.json())
     .then(res => {
-        console.log(res)
+        if (res['Lists'].length === 0 && res['Foreign_lists'].length === 0) {
+            document.getElementById('view-all-lists-container').innerHTML = 'Click Add New List to create new list'
+        }
+        
 
         // let title = document.createElement('h4');
         // title.innerHTML = 'Your lists';
@@ -272,9 +276,13 @@ function build_list_card(list, type) {
         document.getElementById('list-items-container').classList.remove('display-none');
         document.getElementById('toggle-add-new-item-container').classList.remove('display-none');
         document.getElementById('add-new-item-container').classList.add('display-none');
-        document.getElementById('nav-title').innerHTML = list.list_name;
+        // document.getElementById('nav-list-name').innerHTML = list.list_name;
 
         document.getElementById('current-list-id').innerHTML = list.id;
+
+        // document.getElementById('nav-list-name').classList.remove('display-none');
+        // document.getElementById('nav-brand-img-mobile').classList.add('display-none');
+
     })
     list_body.className = 'card-body';
     card.appendChild(list_body);
@@ -306,7 +314,7 @@ function build_individual_list(list_id) {
     // First set the visibilities for page components and adds active class for 'items' button in the top row
     document.getElementById('view-all-lists-div').classList.add('display-none');
     document.getElementById('view-individual-list-div').classList.remove('display-none');
-    document.getElementById('back-button').classList.remove('display-none');
+    // document.getElementById('back-button').classList.remove('display-none');
     document.getElementById('list-action-items').classList.add('list-action-active');
     document.getElementById('log-container').classList.add('display-none');
     

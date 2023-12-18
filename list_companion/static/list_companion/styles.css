@@ -2,7 +2,20 @@
 body {
     max-width: 800px;
     margin: auto;
+}
 
+::-webkit-scrollbar {
+    display: none;
+}
+
+.brand-img-desktop {
+    height: 100%;
+    width: 40%;
+}
+
+.brand-img-mobile {
+    height: 100%;
+    width: 80%;
 }
 
 .custom-list-card-1 {
@@ -95,4 +108,14 @@ body {
 
 .list-item-done-style {
     background-color: bisque;
+}
+
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0.5rem;
+}
+
+tr {
+    border-bottom: 1px solid #EEEEEE;
 }

@@ -10,21 +10,57 @@
 
     <body>
         <div class="container">
-            <h3 id="account-title">Account Management</h3>
-            <div id="account-buttons-div">
-                <p>Logged in as {{ account }}</p>
-                <button class="btn btn-primary mb-2" id="change-password-button">Change Password</button>
-                <br>
-                <button class="btn btn-primary mb-2" id="change-email-button">Change Email Address</button>
-                <br>
-                <button class="btn btn-warning" id="delete-account-button">Delete Account</button>
-                </div>
+            <h3 id="account-title" style="text-align: center;">Account Management</h3>
+            <div class="container mt-4">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                                Username:
+                            </td>
+                            <td>
+                                {{ account.username }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Email Address:
+                            </td>
+                            <td>
+                                {{ account.email }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-            <div id="message-div">
-                {% if message %}
-                    {{ message }}
-                {% endif %}             
+            <div class="container" id="account-buttons-div">
+                <!--<h6 style="text-align: center;">Logged in as <span class="text-success">{{ account }}</span></h6>-->
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <button class="btn btn-primary btn-sm mb-2" id="change-email-button">Change Email Address</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <button class="btn btn-primary btn-sm mb-2" id="change-password-button">Change Password</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <button class="btn btn-warning btn-sm" id="delete-account-button">Delete Account</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
+        </div>
+
+        <div id="message-div">
+            {% if message %}
+                {{ message }}
+            {% endif %}             
         </div>
 
         <div class="container display-none" id="change-password-div">

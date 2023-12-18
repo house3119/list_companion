@@ -12,9 +12,9 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('mobile-navbar').classList.remove('display-none')
         document.getElementById('desktop-navbar').classList.add('display-none')
 
-        document.getElementById('nav-title').innerHTML = 'My Account';
-        document.getElementById('back-button').classList.remove('display-none');
-        document.getElementById('account-title').classList.add('display-none');
+        // document.getElementById('nav-title').innerHTML = 'My Account';
+        // document.getElementById('back-button').classList.remove('display-none');
+        // document.getElementById('account-title').classList.add('display-none');
     }
 
     window.addEventListener('resize',() => {

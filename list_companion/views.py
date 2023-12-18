@@ -28,17 +28,17 @@ def register(request):
         if password != confirm_password:
             return render(request, "list_companion/register.html", {
             "register_form": register_form,
-            "message": "Passwords don't match."
+            "error": "Passwords don't match"
         })
         if User.objects.filter(username=username).exists():
             return render(request, "list_companion/register.html", {
             "register_form": register_form,
-            "message": "User with this username already exist."
+            "error": "User with this username already exist"
         })
         if User.objects.filter(email=email).exists():
             return render(request, "list_companion/register.html", {
             "register_form": register_form,
-            "message": "User with this email address already exist."
+            "error": "User with this email address already exist"
         })
 
         # Try to create new user
@@ -48,14 +48,14 @@ def register(request):
         except:
             return render(request, "list_companion/register.html", {
             "register_form": register_form,
-            "message": "Unexpected error. Please try again."
+            "error": "Unexpected error. Please try again."
         })
 
         # Creating new user succesful
-        return render(request, "list_companion/register.html", {
-            "register_form": register_form,
-            "message": "Registeration successful. You can now log in."
-        })
+        return render(request, "list_companion/login.html", {
+                "login_form": login_form,
+                "message": "Registeration succesful. You can now log in"
+            })
 
     else:
         return render(request, "list_companion/register.html", {
@@ -76,7 +76,7 @@ def login_page(request):
         else:
             return render(request, "list_companion/login.html", {
                 "login_form": login_form,
-                "message": "Invalid username and/or password."
+                "error": "Invalid username and/or password"
             })
     else:
         return render(request, "list_companion/login.html", {

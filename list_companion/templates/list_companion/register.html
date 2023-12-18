@@ -7,18 +7,26 @@
 {% endblock %}
 
 {% block body %}
-    <div class="container w-75">
-        <body>
-            <h2>Register</h2>
-            {% if message %}
-                <h2>{{ message }}</h2>
-            {% endif %}
+    <div class="container" id="register-div">
+
+
             <form action="{% url 'register' %}" method="post">
                 {% csrf_token %}
                 {{ register_form }}
-                <button type="submit" class="btn btn-primary my-2">Register</button>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary my-3">Register</button>
+                </div>
             </form>
-            <a href="{% url 'login' %}">Already have an account? Log in here</a>
-        </body>
+            <div class="container text-center mt-2">
+                {% if error %}
+                    <p class="text-danger">{{ error }}</p>
+                {% elif message %}
+                    <p class="text-success">{{ message }}</p>
+                {% endif %}
+                <a href="{% url 'login' %}">Already have an account? Log in here</a>
+            </div>
+
     </div>
+
+    <script src="{% static 'list_companion/register.js' %}"></script>
 {% endblock %}
