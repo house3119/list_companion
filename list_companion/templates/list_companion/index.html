@@ -8,13 +8,8 @@
 
 {% block body %}
 
-    <body class="mb-4">
+
         
-        <div class="container" style="display:none">
-            <a href="{% url 'logout' %}">Log out</a>
-        </div>
-
-
 
         <!-- Default view to show all own lists as cards -->
         <div id="view-all-lists-div">
@@ -42,10 +37,10 @@
                 <div>
                     <h4 id="desktop-list-name"></h4>
                 </div>
-                <div class="btn-group" role="group" aria-label="Basic example">
+                <div class="btn-group" role="group" aria-label="Basic example" id="list-actions-div">
                     <button type="button" class="btn btn-light list-action" id="list-action-items">Items</button>
                     <button type="button" class="btn btn-light list-action" id="list-action-users">Users</button>
-                    <button type="button" class="btn btn-light list-action" id="list-action-logs">Logs</button>
+                    <button type="button" class="btn btn-light list-action" id="list-action-logs">Log</button>
                 </div>
             </div>
             <div class="container" id="list-items-container">
@@ -92,7 +87,6 @@
         </div>
     -->
 
-    </body>
 
     <script src="{% static 'list_companion/script.js' %}"></script>
 

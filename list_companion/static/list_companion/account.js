@@ -32,86 +32,72 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     // Change Password
-    document.getElementById('change-password-button').addEventListener('click', () => {
+    document.getElementById('change-password-card').addEventListener('click', () => {
         document.getElementById('change-password-div').classList.remove('display-none');
-        document.getElementById('account-buttons-div').classList.add('display-none');
+        document.getElementById('account-main-div').classList.add('display-none');
         document.getElementById('message-div').innerHTML = '';
 
         document.getElementById('back-button').addEventListener('click', () => {
             account()
         })
-
-        document.getElementById('account-title').classList.add('display-none');
 
         document.getElementById('change-password-form').removeAttribute('novalidate')
 
     })
     document.getElementById('change-password-cancel').addEventListener('click', () => {
         document.getElementById('change-password-div').classList.add('display-none');
-        document.getElementById('account-buttons-div').classList.remove('display-none');
+        document.getElementById('account-main-div').classList.remove('display-none');
 
         document.getElementById('back-button').addEventListener('click', () => {
             home()
         })
 
-        document.getElementById('account-title').classList.remove('display-none')
-
     })
 
 
     // Change Email
-    document.getElementById('change-email-button').addEventListener('click', () => {
+    document.getElementById('change-email-card').addEventListener('click', () => {
         document.getElementById('change-email-div').classList.remove('display-none');
-        document.getElementById('account-buttons-div').classList.add('display-none');
+        document.getElementById('account-main-div').classList.add('display-none');
         document.getElementById('message-div').innerHTML = '';
 
         document.getElementById('back-button').addEventListener('click', () => {
             account()
         })
-
-        document.getElementById('account-title').classList.add('display-none')
 
         document.getElementById('change-email-form').removeAttribute('novalidate')
 
     })
     document.getElementById('change-email-cancel').addEventListener('click', () => {
         document.getElementById('change-email-div').classList.add('display-none');
-        document.getElementById('account-buttons-div').classList.remove('display-none');
+        document.getElementById('account-main-div').classList.remove('display-none');
 
         document.getElementById('back-button').addEventListener('click', () => {
             home()
         })
 
-        document.getElementById('account-title').classList.remove('display-none')
-
-
     })
 
 
     // Delete Account
-    document.getElementById('delete-account-button').addEventListener('click', () => {
+    document.getElementById('delete-account-card').addEventListener('click', () => {
         document.getElementById('delete-account-div').classList.remove('display-none');
-        document.getElementById('account-buttons-div').classList.add('display-none');
+        document.getElementById('account-main-div').classList.add('display-none');
         document.getElementById('message-div').innerHTML = '';
 
         document.getElementById('back-button').addEventListener('click', () => {
             account()
         })
 
-        document.getElementById('account-title').classList.add('display-none')
-
         document.getElementById('delete-account-form').removeAttribute('novalidate')
     })
     document.getElementById('delete-account-cancel').addEventListener('click', () => {
         document.getElementById('delete-account-div').classList.add('display-none');
-        document.getElementById('account-buttons-div').classList.remove('display-none');
+        document.getElementById('account-main-div').classList.remove('display-none');
 
         document.getElementById('back-button').addEventListener('click', () => {
             home()
         })
-
-        document.getElementById('account-title').classList.remove('display-none')
-
 
     })
 

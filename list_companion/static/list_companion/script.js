@@ -165,7 +165,14 @@ function build_lists() {
     .then(response => response.json())
     .then(res => {
         if (res['Lists'].length === 0 && res['Foreign_lists'].length === 0) {
-            document.getElementById('view-all-lists-container').innerHTML = 'Click Add New List to create new list'
+            let div = document.createElement('div');
+            div.className = 'container text-center';
+
+            let par = document.createElement('p');
+            par.innerHTML = `&#129364<br>Seems like you don't have any lists yet. Please use the "Create new list" button to create a list!`;
+
+            div.appendChild(par)
+            document.getElementById('view-all-lists-container').appendChild(div)
         }
         
 
@@ -335,6 +342,24 @@ function build_individual_list(list_id) {
         
         // Builds card for each item in the list and adds them to item container
         let length= res["List_items"].length
+
+        if (length === 0) {
+            let card = document.createElement('div');
+            card.className = 'card list-card custom-list-card-2 last-item-card text-center';
+
+            let list_body = document.createElement('div');
+            list_body.className = 'card-body';
+            card.appendChild(list_body);
+
+            let list_text = document.createElement('p');
+            list_text.className = 'card-text';
+            list_text.innerHTML = `&#129364<br>This list is empty. Please use the "Add item" button to start adding items to the list!`
+            list_body.appendChild(list_text);
+
+            document.getElementById('list-items-container').appendChild(card)
+
+        }
+
         let counter = 0
         res["List_items"].forEach(item => {
             counter += 1
@@ -474,7 +499,7 @@ function build_add_item_containers(list_id) {
     document.getElementById('add-new-item-container').appendChild(button)
 
     button = document.createElement('button');
-    button.classList = 'btn btn-primary mb-2 mt-2';
+    button.classList = 'btn btn-primary mt-3 mb-2';
     button.id = 'add-item-toggle-button'
     button.innerHTML = '+ Add item';
     button.addEventListener('click', () => {
@@ -651,7 +676,7 @@ function build_add_user_containers(list_id, owner, logged_user) {
     document.getElementById('add-user-container').appendChild(button)
 
     button = document.createElement('button');
-    button.classList = 'btn btn-primary mb-2 mt-2';
+    button.classList = 'btn btn-primary mb-2 mt-3';
     button.innerHTML = '+ Add user';
     button.addEventListener('click', () => {
         if (document.getElementById('add-user-container').classList.contains('display-none')) {
@@ -683,6 +708,22 @@ function build_logs() {
     fetch(`${base_url}/get_logs/${current_list_id}`)
     .then(response => response.json())
     .then(res => {
+
+        if (res['Log'].length === 0) {
+            let card = document.createElement('div');
+            card.className = 'card list-card custom-list-card-2 last-item-card text-center';
+
+            let list_body = document.createElement('div');
+            list_body.className = 'card-body font-italic';
+            card.appendChild(list_body);
+
+            let list_text = document.createElement('p');
+            list_text.className = 'card-text';
+            list_text.innerHTML = `&#129364<br>This log is empty. Please check here again once you have added something to the list!`
+            list_body.appendChild(list_text);
+
+            document.getElementById('log-container').appendChild(card)
+        } 
 
         let ul = document.createElement('ul');
         ul.className = 'list-group custom-user-ul'

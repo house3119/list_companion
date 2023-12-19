@@ -455,7 +455,7 @@ def change_password(request):
                         "change_password_form": change_password_form,
                         "change_email_form": change_email_form,
                         "delete_account_form": delete_account_form,
-                        "message": "Wrong Password"
+                        "error": "Wrong Password"
                 })
         except:
             return render(request, "list_companion/account.html", {
@@ -463,7 +463,7 @@ def change_password(request):
                         "change_password_form": change_password_form,
                         "change_email_form": change_email_form,
                         "delete_account_form": delete_account_form,
-                        "message": "Unexpected Error"
+                        "error": "Unexpected Error"
             })
     else:
         return HttpResponseRedirect(reverse("account"))
@@ -494,7 +494,7 @@ def change_email(request):
                     "change_password_form": change_password_form,
                     "change_email_form": change_email_form,
                     "delete_account_form": delete_account_form,
-                    "message": "Wrong Password"
+                    "error": "Wrong Password"
                 })
         except:
             return render(request, "list_companion/account.html", {
@@ -502,7 +502,7 @@ def change_email(request):
                 "change_password_form": change_password_form,
                 "change_email_form": change_email_form,
                 "delete_account_form": delete_account_form,
-                "message": "Unexpected Error"
+                "error": "Unexpected Error"
             })
 
     else:
@@ -523,7 +523,7 @@ def delete_account(request):
                     "change_password_form": change_password_form,
                     "change_email_form": change_email_form,
                     "delete_account_form": delete_account_form,
-                    "message": "Wrong Password"
+                    "error": "Wrong Password"
                 })
         except:
             return render(request, "list_companion/account.html", {
@@ -531,7 +531,7 @@ def delete_account(request):
                     "change_password_form": change_password_form,
                     "change_email_form": change_email_form,
                     "delete_account_form": delete_account_form,
-                    "message": "Unexpected Error"
+                    "error": "Unexpected Error"
                 })
     else:
         return JsonResponse({"Message": "Forbidden"},status=403)

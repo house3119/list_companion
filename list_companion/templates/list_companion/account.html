@@ -8,22 +8,30 @@
 
 {% block body %}
 
-    <body>
-        <div class="container">
-            <h3 id="account-title" style="text-align: center;">Account Management</h3>
-            <div class="container mt-4">
-                <table>
+    <div id="account-main-div" class="container">
+        <div class="card">
+            <h5 class="card-header">
+                Account Management
+            </h5>
+            <div class="card-body account-card-1">
+                <table style="width: 100%">
                     <tbody>
                         <tr>
-                            <td>
+                            <td style="width: 50%">
                                 Username:
                             </td>
                             <td>
                                 {{ account.username }}
                             </td>
                         </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-body account-card-1">
+                <table style="width: 100%">
+                    <tbody>
                         <tr>
-                            <td>
+                            <td style="width: 50%">
                                 Email Address:
                             </td>
                             <td>
@@ -33,73 +41,113 @@
                     </tbody>
                 </table>
             </div>
-            <div class="container" id="account-buttons-div">
-                <!--<h6 style="text-align: center;">Logged in as <span class="text-success">{{ account }}</span></h6>-->
-                <table>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <button class="btn btn-primary btn-sm mb-2" id="change-email-button">Change Email Address</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <button class="btn btn-primary btn-sm mb-2" id="change-password-button">Change Password</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <button class="btn btn-warning btn-sm" id="delete-account-button">Delete Account</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div id="change-email-card" class="card-body account-card-2" style="border-bottom: 1px solid #CFCFCF;">
+                <text>Change Email Address</text>
+            </div>
+            <div id="change-password-card" class="card-body account-card-2" style="border-bottom: 1px solid #CFCFCF;">
+                <text>Change Password</text>
+            </div>
+            <div id="delete-account-card" class="card-body">
+                <text class="text-danger">Delete Account</text>
             </div>
         </div>
+    </div>
 
-        <div id="message-div">
-            {% if message %}
-                {{ message }}
-            {% endif %}             
+    <!--<div class="container">
+        <h3 id="account-title" style="text-align: center;">Account Management</h3>
+        <div class="container mt-4">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>
+                            Username:
+                        </td>
+                        <td>
+                            {{ account.username }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Email Address:
+                        </td>
+                        <td>
+                            {{ account.email }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-
-        <div class="container display-none" id="change-password-div">
-            <h3>Change Password</h3>
-            <form action="{% url 'change_password' %}" method="post" novalidate id="change-password-form">
-                {% csrf_token %}
-                {{ change_password_form }}
-                <div class="mt-2">
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                    <button class="btn btn-secondary" id="change-password-cancel">Cancel</button>
-                </div>
-            </form>
+        <div class="container" id="account-buttons-div">
+            <h6 style="text-align: center;">Logged in as <span class="text-success">{{ account }}</span></h6>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>
+                            <button class="btn btn-primary btn-sm mb-2" id="change-email-button">Change Email Address</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button class="btn btn-primary btn-sm mb-2" id="change-password-button">Change Password</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button class="btn btn-warning btn-sm" id="delete-account-button">Delete Account</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
+    </div>-->
 
-        <div class="container display-none" id="change-email-div">
-            <h3>Change Email Address</h3>
-            <form action="{% url 'change_email' %}" method="post" novalidate id="change-email-form">
-                {% csrf_token %}
-                {{ change_email_form }}
-                <div class="mt-2">
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                    <button class="btn btn-secondary" id="change-email-cancel">Cancel</button>
-                </div>
-            </form>
-        </div>
+    <div id="message-div" class="container text-center my-3">
+        {% if message %}
+            <p class="text-success">{{ message }}</p>
+        {% elif error %}
+            <p class="text-danger">{{ error }}</p>
+        {% endif %}         
+    </div>
 
-        <div class="container display-none" id="delete-account-div">
-            <h3>Delete Account</h3>
-            <form action="{% url 'delete_account' %}" method="post" novalidate id="delete-account-form">
-                {% csrf_token %}
-                {{ delete_account_form }}
-                <div class="mt-2">
-                    <button type="submit" class="btn btn-warning" id="delete-account-submit-button">Delete</button>
-                    <button class="btn btn-secondary" id="delete-account-cancel">Cancel</button>
-                </div>
-            </form>
-        </div>
+    
 
-    </body>
+    <div class="container display-none" id="change-password-div">
+        <h3>Change Password</h3>
+        <form action="{% url 'change_password' %}" method="post" novalidate id="change-password-form">
+            {% csrf_token %}
+            {{ change_password_form }}
+            <div class="mt-2">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <button class="btn btn-secondary" id="change-password-cancel">Cancel</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="container display-none" id="change-email-div">
+        <h3>Change Email Address</h3>
+        <form action="{% url 'change_email' %}" method="post" novalidate id="change-email-form">
+            {% csrf_token %}
+            {{ change_email_form }}
+            <div class="mt-2">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <button class="btn btn-secondary" id="change-email-cancel">Cancel</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="container display-none" id="delete-account-div">
+        <h3>Delete Account</h3>
+        <form action="{% url 'delete_account' %}" method="post" novalidate id="delete-account-form">
+            {% csrf_token %}
+            {{ delete_account_form }}
+            <div class="mt-2">
+                <button type="submit" class="btn btn-danger" id="delete-account-submit-button">Delete</button>
+                <button class="btn btn-secondary" id="delete-account-cancel">Cancel</button>
+            </div>
+        </form>
+    </div>
+
+
 
     <script src="{% static 'list_companion/account.js' %}"></script>
 

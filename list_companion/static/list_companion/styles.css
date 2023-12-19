@@ -4,6 +4,27 @@ body {
     margin: auto;
 }
 
+.account-card-1 {
+    border-bottom: 1px solid #CFCFCF;
+}
+
+.account-card-1:hover {
+    cursor: default!important;
+}
+
+.account-card-2 {
+    border-bottom: 1px solid #CFCFCF;
+}
+
+.account-card-2:hover {
+    background-color: ghostwhite;
+
+}
+
+#delete-account-card:hover {
+    background-color: ghostwhite;
+}
+
 ::-webkit-scrollbar {
     display: none;
 }
@@ -23,10 +44,8 @@ body {
 }
 
 .custom-list-card-2 {
-
     margin-bottom: -1px;
     border-radius: 0;
-
 }
 
 .last-item-card {
@@ -93,8 +112,9 @@ body {
 }
 
 .list-item-done-checkbox:checked {
-    background-color: forestgreen;
+    background-color: #97D2CA;
     border-color: forestgreen;
+    
     /* color: black; */
 }
 
@@ -110,12 +130,11 @@ body {
     background-color: bisque;
 }
 
-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0.5rem;
+.border-bottom-grey {
+    border-bottom: 1px solid #CFCFCF;
 }
 
-tr {
-    border-bottom: 1px solid #EEEEEE;
+.brand-img:hover {
+    cursor: pointer;
 }
+
