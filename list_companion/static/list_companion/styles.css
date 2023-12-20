@@ -112,7 +112,9 @@ body {
 }
 
 .list-item-done-checkbox:checked {
-    background-color: #97D2CA;
+    /* background-color: #97D2CA; */
+    /* background-color: #7ebfb8; */
+    background-color: forestgreen;
     border-color: forestgreen;
     
     /* color: black; */
@@ -138,3 +140,6 @@ body {
     cursor: pointer;
 }
 
+.btn-primary {
+    
+}

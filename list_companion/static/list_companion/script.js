@@ -57,11 +57,13 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('toggle-create-new-list-div-button').addEventListener('click', () => {
         if (document.getElementById('create-new-list-div').style.display === 'none') {
             document.getElementById('create-new-list-div').style.display = 'block';
-            document.getElementById('toggle-create-new-list-div-button').innerHTML = '- Create new list'
+            document.getElementById('toggle-create-new-list-div-button').innerHTML = '- Create new list';
+            document.getElementById('toggle-create-new-list-div-button').classList.add('active')
             document.getElementById('new-list-name').focus()
         } else {
             document.getElementById('create-new-list-div').style.display = 'none';
             document.getElementById('toggle-create-new-list-div-button').innerHTML = '+ Create new list'
+            document.getElementById('toggle-create-new-list-div-button').classList.remove('active')
         }
     })
 
@@ -106,6 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('add-user-container').classList.add('display-none')
         document.getElementById('list-action-logs').classList.remove('list-action-active');
         document.getElementById('log-container').classList.add('display-none');
+        document.getElementById('user-info-container').classList.remove('display-none');
 
         build_user_view()
     })
@@ -127,6 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('add-user-message').innerHTML = '';
         document.getElementById('list-action-logs').classList.remove('list-action-active');
         document.getElementById('log-container').classList.add('display-none');
+        document.getElementById('user-info-container').classList.add('display-none');
     })
 
     document.getElementById('list-action-logs').addEventListener('click', () => {
@@ -146,6 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('add-user-container').classList.add('display-none')
         document.getElementById('add-user-message').innerHTML = '';
         document.getElementById('log-container').classList.remove('display-none');
+        document.getElementById('user-info-container').classList.add('display-none');
 
         build_logs()
     })
@@ -169,7 +174,7 @@ function build_lists() {
             div.className = 'container text-center';
 
             let par = document.createElement('p');
-            par.innerHTML = `&#129364<br>Seems like you don't have any lists yet. Please use the "Create new list" button to create a list!`;
+            par.innerHTML = `&#129364<br>Welcome to List Companion! Seems like you don't have any lists yet. Please use the "Create new list" button to create a list!`;
 
             div.appendChild(par)
             document.getElementById('view-all-lists-container').appendChild(div)
@@ -330,9 +335,8 @@ function build_individual_list(list_id) {
     fetch(`${base_url}/get_list_items/${list_id}`)
     .then(response => response.json())
     .then(res => {
-        if (desktop_view === true) {
-            document.getElementById('desktop-list-name').innerHTML = res["List_name"]
-        }
+
+        document.getElementById('desktop-list-name').innerHTML = res["List_name"]
 
         // Empty the list items container
         var div = document.getElementById('list-items-container');
@@ -506,10 +510,12 @@ function build_add_item_containers(list_id) {
         if (document.getElementById('add-new-item-container').classList.contains('display-none')) {
             document.getElementById('add-new-item-container').classList.remove('display-none')
             button.innerHTML = '- Add item';
+            button.classList.add('active')
             document.getElementById('add-new-item-input').focus()
         } else {
             document.getElementById('add-new-item-container').classList.add('display-none')
             button.innerHTML = '+ Add item';
+            button.classList.remove('active')
         }
         
     })
@@ -667,8 +673,12 @@ function build_add_user_containers(list_id, owner, logged_user) {
                 build_user_view()
                 document.getElementById('add-user-message').innerHTML = res.Message;
                 document.getElementById('add-user-container').classList.add('display-none')
+                document.getElementById('add-user-message').classList.add('text-success')
+                document.getElementById('add-user-message').classList.remove('text-danger')
             } else {
                 document.getElementById('add-user-message').innerHTML = res.Message;
+                document.getElementById('add-user-message').classList.add('text-danger')
+                document.getElementById('add-user-message').classList.remove('text-success')
             }
         })
 
@@ -682,15 +692,18 @@ function build_add_user_containers(list_id, owner, logged_user) {
         if (document.getElementById('add-user-container').classList.contains('display-none')) {
             document.getElementById('add-user-container').classList.remove('display-none')
             button.innerHTML = '- Add user';
+            button.classList.add('active')
             document.getElementById('add-user-input').focus()
         } else {
             document.getElementById('add-user-container').classList.add('display-none')
             button.innerHTML = '+ Add user';
+            button.classList.remove('active')
         }
         
     })
 
     document.getElementById('toggle-add-user-container').appendChild(button)
+
 }
 
 

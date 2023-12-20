@@ -140,9 +140,12 @@
         <form action="{% url 'delete_account' %}" method="post" novalidate id="delete-account-form">
             {% csrf_token %}
             {{ delete_account_form }}
-            <div class="mt-2">
+            <div class="mt-2 mb-3">
                 <button type="submit" class="btn btn-danger" id="delete-account-submit-button">Delete</button>
                 <button class="btn btn-secondary" id="delete-account-cancel">Cancel</button>
+            </div>
+            <div class="text-center">
+                <p style="font-style: italic;"><b>Warning! </b>Deleting your account will delete also all lists where you are the owner. They will be deleted also for all the users you might have shared the list with.</p>
             </div>
         </form>
     </div>
