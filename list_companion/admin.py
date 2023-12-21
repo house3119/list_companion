@@ -1,6 +1,6 @@
 from django.contrib import admin
-
 from .models import User, List, List_item, Log_entry
+
 
 # Register your models here.
 class ListAdmin(admin.ModelAdmin):
