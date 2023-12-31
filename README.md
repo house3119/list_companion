@@ -6,6 +6,8 @@ Hello and welcome! This is my final project for CS50 Web - List Companion. List 
 ## Design
 List Companion is built using Django on the back-end and Javascript on the front-end. The application is mobile-responsive as I planned it from the start to be used mostly with mobile devices. However, the app is very usable on desktops as well. List Companion functions primarily as a single-page app using Javascript to fetch and update the page contents.
 
+I decided on this particular project as this kind of listing application is something me and my friends/family have been talking about. We have been trying multiple similar apps but none of them has been fully satisfying, so making my own seemed like a good idea!
+
 ## Distinctiveness and Complexity
 _Is my project discting from the other projects in the course?_
 
