@@ -4,7 +4,7 @@
 Hello and welcome! This is my final project for CS50 Web - List Companion. List Companion is a web app used to create, share and manipulate checklists with other users.
 
 ## Design
-List Companion is built using Django on the back-end and Javascript on the front-end. The application is mobile-responsive as I planned it from the start to be used mostly with mobile devices. The app is very usable on desktops as well. List Companion functions primarily as a single-page app using Javascript to fetch and update the page contents.
+List Companion is built using Django on the back-end and Javascript on the front-end. The application is mobile-responsive as I planned it from the start to be used mostly with mobile devices. However, the app is very usable on desktops as well. List Companion functions primarily as a single-page app using Javascript to fetch and update the page contents.
 
 ## Distinctiveness and Complexity
 _Is my project discting from the other projects in the course?_
@@ -77,7 +77,7 @@ List of all the files for the web app **I created** or **modified** in some way:
     * Login page ('/login')
     * Extends login_template.html
 * **main_template.html**
-    * Layout for indec.html and account.html
+    * Layout for index.html and account.html
     * Mostly contains the navbar
 * **register.html**
     * Register page ('/register')
