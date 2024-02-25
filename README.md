@@ -1,5 +1,5 @@
 # List Companion
-### Video Demo: [https://youtu.be/ZD-UQR2fBFM](https://youtu.be/ZD-UQR2fBFM)
+### Video Demo:
 
 ## Table of Contents
 * [Background](#background)
